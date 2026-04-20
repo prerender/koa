@@ -1,0 +1,33 @@
+{
+  "name": "prerender-koa",
+  "version": "1.0.0",
+  "description": "Koa middleware for prerendering JavaScript-rendered pages for SEO via Prerender.io",
+  "author": "Prerender.io",
+  "license": "MIT",
+  "main": "index.js",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "keywords": [
+    "koa",
+    "prerender",
+    "prerender.io",
+    "seo",
+    "middleware"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/prerender/integrations",
+    "directory": "prerender-koa"
+  },
+  "peerDependencies": {
+    "koa": ">=2.0.0"
+  },
+  "devDependencies": {
+    "koa": "^3.2.0",
+    "supertest": "^7.0.0"
+  },
+  "scripts": {
+    "test": "node --test"
+  }
+}
