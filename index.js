@@ -57,6 +57,7 @@ async function fetchPrerendered(apiUrl, ctx, settings) {
   if (settings.token) {
     headers['X-Prerender-Token'] = settings.token;
   }
+  headers['X-Prerender-Int-Type'] = 'Koa';
   const response = await fetch(apiUrl, { headers, redirect: 'manual' });
   const body = await response.text();
   return { status: response.status, body };
