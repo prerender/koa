@@ -21,6 +21,7 @@ const MOCK_PATH = process.env.MOCK_SERVER_PATH || path.join(__dirname, '..', 'mo
 const BOT_UA = 'Mozilla/5.0 (compatible; Googlebot/2.1)';
 const BROWSER_UA = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36';
 const TOKEN = 'test-token-abc123';
+const UUID_V4 = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
 let mockProc;
 
@@ -83,6 +84,31 @@ test('bot request emits exactly one outgoing request with required headers', asy
   assert.equal(r.headers['user-agent'], BOT_UA);
   assert.equal(r.headers['x-prerender-token'], TOKEN);
   assert.equal(r.headers['x-prerender-int-type'], 'Koa');
+  assert.ok(r.headers['x-prerender-int-version'], 'X-Prerender-Int-Version must be present');
+  assert.match(
+    r.headers['x-prerender-int-version'],
+    /^\d+\.\d+\.\d+/,
+    'X-Prerender-Int-Version should be a semver string',
+  );
+  assert.match(
+    r.headers['x-prerender-request-id'],
+    UUID_V4,
+    'X-Prerender-Request-Id should be a UUID v4',
+  );
+});
+
+test('X-Prerender-Request-Id is unique per outgoing request', async () => {
+  const app = createApp();
+  await request(app.callback()).get('/').set('User-Agent', BOT_UA);
+  await request(app.callback()).get('/').set('User-Agent', BOT_UA);
+
+  const recorded = await getRecorded();
+  assert.equal(recorded.length, 2);
+  assert.notEqual(
+    recorded[0].headers['x-prerender-request-id'],
+    recorded[1].headers['x-prerender-request-id'],
+    'Request IDs across consecutive requests must differ',
+  );
 });
 
 test('browser request emits no outgoing request', async () => {

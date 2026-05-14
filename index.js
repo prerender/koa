@@ -1,5 +1,8 @@
 'use strict';
 
+const { randomUUID } = require('node:crypto');
+const { version: PACKAGE_VERSION } = require('./package.json');
+
 const internals = {};
 
 internals.crawlerUserAgents = [
@@ -58,6 +61,8 @@ async function fetchPrerendered(apiUrl, ctx, settings) {
     headers['X-Prerender-Token'] = settings.token;
   }
   headers['X-Prerender-Int-Type'] = 'Koa';
+  headers['X-Prerender-Int-Version'] = PACKAGE_VERSION;
+  headers['X-Prerender-Request-Id'] = randomUUID();
   const response = await fetch(apiUrl, { headers, redirect: 'manual' });
   const body = await response.text();
   return { status: response.status, body };
