@@ -49,6 +49,24 @@ test('static asset with bot UA is not prerendered', async () => {
   assert.equal(res.headers['x-prerender'], 'false');
 });
 
+test('font asset with bot UA is not prerendered', async () => {
+  mockFetch();
+  const app = createApp();
+  const res = await request(app.callback()).get('/fonts/inter.woff2').set('User-Agent', BOT_UA);
+  assert.equal(res.status, 200);
+  assert.equal(res.text, 'original');
+  assert.equal(res.headers['x-prerender'], 'false');
+});
+
+test('uppercase static asset with bot UA is not prerendered', async () => {
+  mockFetch();
+  const app = createApp();
+  const res = await request(app.callback()).get('/STYLES.CSS').set('User-Agent', BOT_UA);
+  assert.equal(res.status, 200);
+  assert.equal(res.text, 'original');
+  assert.equal(res.headers['x-prerender'], 'false');
+});
+
 test('_escaped_fragment_ triggers prerender for any user agent', async () => {
   mockFetch();
   const app = createApp({ token: 'test-token' });

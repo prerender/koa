@@ -127,6 +127,22 @@ test('static asset with bot UA emits no outgoing request', async () => {
   assert.equal(recorded.length, 0);
 });
 
+test('font asset with bot UA emits no outgoing request', async () => {
+  const app = createApp();
+  await request(app.callback()).get('/fonts/inter.woff2').set('User-Agent', BOT_UA);
+
+  const recorded = await getRecorded();
+  assert.equal(recorded.length, 0);
+});
+
+test('uppercase static asset with bot UA emits no outgoing request', async () => {
+  const app = createApp();
+  await request(app.callback()).get('/STYLES.CSS').set('User-Agent', BOT_UA);
+
+  const recorded = await getRecorded();
+  assert.equal(recorded.length, 0);
+});
+
 test('X-Prerender-Token header is omitted when token is not configured', async () => {
   const app = createApp({ token: null });
   await request(app.callback()).get('/').set('User-Agent', BOT_UA);
