@@ -17,8 +17,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git://github.com/prerender/integrations",
-    "directory": "prerender-koa"
+    "url": "git+https://github.com/prerender/koa.git"
   },
   "peerDependencies": {
     "koa": ">=2.0.0"
